@@ -33,4 +33,6 @@ Fill this in before you mark the PR ready.
 | --- | --- |
 | PR | |
 | Green CI run | |
-| Local `dotnet test` summary line | |
+| Local `dotnet test` summary line | `Passed!  - Failed: 0, Passed: 115, Skipped: 0, Total: 115 - Kotsu.Scheduling.Tests.dll (net11.0)` |
+| Searches in `backend/Kotsu.Scheduling` (expected: no matches) | `GetValues<DayOfWeek>`, `DateTime.Now`, `DateTime.Today`, `DateTime.UtcNow`, `TimeProvider`, `enum` declarations, `PackageReference` and `ProjectReference`: no matches. |
+| Boundary tests catch real bugs | With the last day dropped from the window, 8 tests failed. With each date given the hours for its position in the window instead of its weekday, the Wednesday-start test failed. Both changes were reverted. |
