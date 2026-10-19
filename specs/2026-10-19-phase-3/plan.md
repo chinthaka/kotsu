@@ -2,7 +2,7 @@
 
 Branch: `feature/phase-3`, from `main` after Phase 2 was merged. See [requirement.md](requirement.md) for the decisions (D1–D13) and [validation.md](validation.md) for the merge criteria.
 
-Every group is test-first. Write the failing tests for its rules, run them and see them fail, then write the least code that passes, then tidy up. Tests use Arrange, Act, Assert with comment markers. Commit at the end of each group.
+Every section is test-first. Write the failing tests for its rules, run them and see them fail, then write the least code that passes, then tidy up. Tests use Arrange, Act, Assert with comment markers. Commit at the end of each section.
 
 Unless a test says otherwise, the examples use a 1-week window from Monday 2 November 2026, and this week: Monday to Thursday at 2 hours, Friday at 1.5 hours, Saturday at 4 hours and Sunday at 0 hours. The weekly total is 13.5 hours.
 
