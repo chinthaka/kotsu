@@ -5,5 +5,5 @@ namespace Kotsu.Scheduling;
 /// </summary>
 public static class ScaffoldCheck
 {
-    public static bool IsReady() => false;
+    public static bool IsReady() => true;
 }
