@@ -2,7 +2,7 @@
 
 Kotsu is a study scheduler for students. A student picks their country, stage and subjects, selects the syllabus topics they want to cover, and Kotsu spreads those topics across a 1 to 4 week window, sharing their study time across subjects.
 
-> **Status:** planning. No application code has been written yet. The plan lives in [specs/](specs/).
+> **Status:** building the scheduling engine. The solution, the empty `Kotsu.Scheduling` library and its tests are in place, and CI tests and lints every pull request. The plan lives in [specs/](specs/).
 
 ## What it does
 
@@ -39,7 +39,7 @@ Web, iOS and Android, all sharing one backend.
 
 | Area | Choice |
 | --- | --- |
-| Backend | .NET 10 (C#), ASP.NET Core, PostgreSQL with EF Core |
+| Backend | .NET 11 (C#), ASP.NET Core, PostgreSQL with EF Core |
 | Scheduling engine | Pure C# library with no I/O |
 | Web | React + Vite, TypeScript |
 | Mobile | React Native + Expo, TypeScript, one codebase for iOS and Android |
@@ -49,6 +49,18 @@ Web, iOS and Android, all sharing one backend.
 | Load | At least 10 requests per second normally, up to 50 at peak near exams |
 
 Code is written test-first, and GitHub Actions runs tests and lint on every pull request.
+
+## Build and test
+
+You need the .NET SDK pinned in [global.json](global.json) (.NET 11). From the repository root:
+
+```
+dotnet build
+dotnet format --verify-no-changes
+dotnet test
+```
+
+The build treats analyzer warnings as errors, and `dotnet format` is the lint step CI runs.
 
 ## Documentation
 
