@@ -56,4 +56,5 @@ Fill this in before you mark the PR ready.
 | Green CI run | https://github.com/chinthaka/kotsu/actions/runs/39276706177 (all steps passed) |
 | Local `dotnet test`, red (summary line) | `Failed!  - Failed: 1, Passed: 0, Skipped: 0, Total: 1 - Kotsu.Scheduling.Tests.dll (net11.0)` |
 | Local `dotnet test`, green (summary line) | `Passed!  - Failed: 0, Passed: 1, Skipped: 0, Total: 1 - Kotsu.Scheduling.Tests.dll (net11.0)` |
-| Branch protection (screenshot or `gh api` output) | |
+| Branch protection (screenshot or `gh api` output) | Checked 2026-10-19 with `GET /repos/chinthaka/kotsu/rules/branches/main`. Active rules: `deletion`, `non_fast_forward`, `pull_request` (0 approvals). **Not yet required:** the `build-test-lint` status check and up-to-date branches. |
+| Lint gate check (task group 7, done after merge on `feature/phase-2`) | Bad indentation: `dotnet format --verify-no-changes` exit 2. Unused variable: `dotnet build` exit 1 (`CS0219`, `IDE0059`). Both changes were reverted. |
