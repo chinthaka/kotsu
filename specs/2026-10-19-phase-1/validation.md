@@ -52,8 +52,8 @@ Fill this in before you mark the PR ready.
 
 | Item | Link or output |
 | --- | --- |
-| Red CI run (failing test) | |
-| Green CI run | |
-| Local `dotnet test`, red (summary line) | |
-| Local `dotnet test`, green (summary line) | |
+| Red CI run (failing test) | https://github.com/chinthaka/kotsu/actions/runs/39276487572 (restore, build and lint passed; failed at Test) |
+| Green CI run | https://github.com/chinthaka/kotsu/actions/runs/39276706177 (all steps passed) |
+| Local `dotnet test`, red (summary line) | `Failed!  - Failed: 1, Passed: 0, Skipped: 0, Total: 1 - Kotsu.Scheduling.Tests.dll (net11.0)` |
+| Local `dotnet test`, green (summary line) | `Passed!  - Failed: 0, Passed: 1, Skipped: 0, Total: 1 - Kotsu.Scheduling.Tests.dll (net11.0)` |
 | Branch protection (screenshot or `gh api` output) | |
