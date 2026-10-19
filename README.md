@@ -1,44 +1,57 @@
 # Kotsu
 
-Kotsu is a syllabus scheduler for students. A student picks the exam board their school follows and the exam they are preparing for, and Kotsu schedules the syllabus content across the time remaining before the exam.
+Kotsu is a study scheduler for students. A student picks their country, stage and subjects, selects the syllabus topics they want to cover, and Kotsu spreads those topics across a 1 to 4 week window, sharing their study time across subjects.
 
-> **Status:** early planning. No code has been written yet; this README records the stakeholder input the project starts from.
+> **Status:** planning. No application code has been written yet. The plan lives in [specs/](specs/).
 
 ## What it does
 
-- **Choose an exam board:** the student selects the exam board their school follows.
-- **Choose an exam:** the student selects which exam they need to schedule for.
-- **Get a study schedule:** Kotsu spreads the syllabus content for that exam over the time remaining, so the student can prepare in time.
+1. The student signs in.
+2. They enter their first name (used only to greet them), how long to schedule for (1 to 4 weeks), and their country: England, Wales or Scotland.
+3. They choose their stage and their subjects. In England they also choose their exam board; in Scotland (SQA) and Wales (WJEC) the board is set automatically.
+4. For each subject they select the whole syllabus or specific sub-topics.
+5. They enter how many hours they can study on each day of the week.
+6. Kotsu produces one schedule covering all their subjects, with recap time built in.
+
+If the student misses days, Kotsu asks whether to reschedule and only does so if they say yes. If the window is too short to fit recap, Kotsu reminds them to recap in their own time.
 
 ## Who it is for
 
-Students aged 13 and up. The application must be very easy to understand and use for anyone in that age range.
+Students aged 13 and up. Every screen must be understandable by a 13-year-old without help.
+
+## Launch scope
+
+Great Britain only. Northern Ireland and other countries follow after launch.
+
+| Country | Stages | Exam board |
+| --- | --- | --- |
+| England | Key Stage 4, Key Stage 5 | Chosen by the student |
+| Scotland | National 5, Higher, Advanced Higher | SQA |
+| Wales | Key Stage 4 (GCSE), Post-16 (AS and A level) | WJEC |
+
+Syllabus content is curated by the team and checked against each board's published specification.
 
 ## Platforms
 
-| Client | Notes |
+Web, iOS and Android, all sharing one backend.
+
+## Tech stack
+
+| Area | Choice |
 | --- | --- |
-| Web | Browser-based interface |
-| iOS | Separate mobile client |
-| Android | Separate mobile client |
+| Backend | .NET 10 (C#), ASP.NET Core, PostgreSQL with EF Core |
+| Scheduling engine | Pure C# library with no I/O |
+| Web | React + Vite, TypeScript |
+| Mobile | React Native + Expo, TypeScript, one codebase for iOS and Android |
+| API client | TypeScript, generated from the backend's OpenAPI document |
+| Hosting | Microsoft Azure |
+| Observability | OpenTelemetry |
+| Load | At least 10 requests per second normally, up to 50 at peak near exams |
 
-All three clients share a common backend.
+Code is written test-first, and GitHub Actions runs tests and lint on every pull request.
 
-## Stakeholder requirements
+## Documentation
 
-| Area | Requirement |
-| --- | --- |
-| Frontend | Modern TypeScript |
-| Backend | Latest .NET, shared by the web and mobile clients |
-| Scalability | Must be able to handle any load |
-| Usability | Very easy to understand and use for ages 10+ |
-
-## Open questions
-
-These are not covered by the stakeholder input and need a decision before development starts:
-
-- Which exam boards and exams are supported at launch, and where the syllabus content comes from.
-- How the mobile clients are built (native per platform or a shared cross-platform codebase).
-- What "any load" means as a measurable target (expected users, peak usage around exam season).
-- Whether students need accounts, and what that means for the privacy of users under 18.
-- Whether launch schedules one exam at a time or several overlapping exams sharing the same study hours.
+- [Mission](specs/mission.md): what Kotsu does, for whom, and the product decisions.
+- [Tech stack](specs/tech-stack.md): technology, architecture and development practice.
+- [Roadmap](specs/roadmap.md): the phased implementation plan.
