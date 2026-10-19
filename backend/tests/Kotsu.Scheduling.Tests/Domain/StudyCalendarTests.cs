@@ -136,4 +136,84 @@ public class StudyCalendarTests
         // Assert
         Assert.Equal(13.5m, total.Value);
     }
+
+    [Fact]
+    public void Create_ForFourWeeks_RunsFromStartDateToEndDate()
+    {
+        // Arrange
+        var window = Window(_monday, 4);
+
+        // Act
+        var calendar = StudyCalendar.Create(window, ExampleWeek()).Value;
+
+        // Assert
+        Assert.Equal(28, calendar.Days.Count);
+        Assert.Equal(window.StartDate, calendar.Days[0].Date);
+        Assert.Equal(window.EndDate, calendar.Days[^1].Date);
+        Assert.Equal(54m, calendar.TotalHours.Value);
+    }
+
+    [Fact]
+    public void Create_StartingOnAWednesday_RunsToTuesdayWithEachDatesOwnWeekday()
+    {
+        // Arrange
+        var wednesday = new DateOnly(2026, 11, 4);
+
+        // Act
+        var calendar = Calendar(wednesday, 1, ExampleWeek());
+
+        // Assert
+        Assert.Equal(
+            [
+                new DailyHours(new DateOnly(2026, 11, 4), Hours(2m)),
+                new DailyHours(new DateOnly(2026, 11, 5), Hours(2m)),
+                new DailyHours(new DateOnly(2026, 11, 6), Hours(1.5m)),
+                new DailyHours(new DateOnly(2026, 11, 7), Hours(4m)),
+                new DailyHours(new DateOnly(2026, 11, 8), Hours(0m)),
+                new DailyHours(new DateOnly(2026, 11, 9), Hours(2m)),
+                new DailyHours(new DateOnly(2026, 11, 10), Hours(2m)),
+            ],
+            calendar.Days);
+    }
+
+    [Theory]
+    [InlineData(2026, 11, 23, 2)] // crosses the end of November
+    [InlineData(2026, 12, 28, 1)] // crosses the end of 2026
+    public void Create_AcrossAMonthOrYearEnd_HasConsecutiveDates(int year, int month, int day, int weeks)
+    {
+        // Arrange
+        var start = new DateOnly(year, month, day);
+
+        // Act
+        var calendar = Calendar(start, weeks, ExampleWeek());
+
+        // Assert
+        Assert.Equal(
+            Enumerable.Range(0, 7 * weeks).Select(start.AddDays),
+            calendar.Days.Select(d => d.Date));
+    }
+
+    [Fact]
+    public void Create_WithHalfAnHourEveryDay_GivesHalfAnHourOnEveryDate()
+    {
+        // Act
+        var calendar = Calendar(_monday, 1, EveryDay(0.5m));
+
+        // Assert
+        Assert.All(calendar.Days, day => Assert.Equal(Hours(0.5m), day.Hours));
+        Assert.Equal(3.5m, calendar.TotalHours.Value);
+    }
+
+    [Fact]
+    public void Create_WithZeroHoursEveryDay_GivesZeroOnEveryDate()
+    {
+        // Act
+        var result = StudyCalendar.Create(Window(_monday, 2), EveryDay(0m));
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.Equal(14, result.Value.Days.Count);
+        Assert.All(result.Value.Days, day => Assert.Equal(StudyHours.Zero, day.Hours));
+        Assert.Equal(StudyHours.Zero, result.Value.TotalHours);
+    }
 }
