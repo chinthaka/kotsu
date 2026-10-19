@@ -35,7 +35,7 @@ Every group is test-first. Write the failing tests for its rules, run them and s
 
 6.1 `SubTopic` tests: its estimated hours must be at least 0.5 (D4).
 6.2 `Topic` tests: it needs at least one sub-topic, and duplicate sub-topic ids are rejected. `EstimatedHours` is the sum of its sub-topics' hours (D9).
-6.3 `Syllabus` tests: it is identified by stage, subject and board. It needs at least one topic, and duplicate topic ids are rejected (D8, D10).
+6.3 `Syllabus` tests: it is identified by stage, subject and board. It needs at least one topic. Duplicate topic ids are rejected, and so is the same sub-topic id in two topics (D8, D10).
 6.4 Implement the three types.
 
 ## 7. ScheduleWindow
