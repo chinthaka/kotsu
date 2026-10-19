@@ -40,7 +40,7 @@ Fill this in before you mark the PR ready.
 
 | Item | Link or output |
 | --- | --- |
-| PR | |
-| Green CI run | |
+| PR | https://github.com/chinthaka/kotsu/pull/3 |
+| Green CI run | https://github.com/chinthaka/kotsu/actions/runs/39282722790 (`build-test-lint` passed) |
 | Local `dotnet test` summary line | `Passed!  - Failed: 0, Passed: 94, Skipped: 0, Total: 94 - Kotsu.Scheduling.Tests.dll (net11.0)` |
 | `enum` search in `backend/Kotsu.Scheduling` (expected: no matches) | No matches. Great Britain names appear only in two doc comments as examples (`ExamBoard.cs`, `QualificationStage.cs`). |
