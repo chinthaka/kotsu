@@ -2,7 +2,7 @@
 
 Branch: `feature/phase-2`, from `main` after Phase 1 was merged. See [requirement.md](requirement.md) for the decisions (D1–D15) and [validation.md](validation.md) for the merge criteria.
 
-Every group is test-first. Write the failing tests for its rules, run them and see them fail, then write the least code that passes, then tidy up. Tests use Arrange, Act, Assert with comment markers and assert on error `Code`s (D2). Commit at the end of each group.
+Every section is test-first. Write the failing tests for its rules, run them and see them fail, then write the least code that passes, then tidy up. Tests use Arrange, Act, Assert with comment markers and assert on error `Code`s (D2). Commit at the end of each section.
 
 ## 1. Clean up the scaffold
 
