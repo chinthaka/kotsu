@@ -2,7 +2,7 @@
 
 Branch: `feature/phase-1`. See [requirement.md](requirement.md) for the decisions (D1–D10) and [validation.md](validation.md) for the merge criteria.
 
-Each group ends with something that can be checked. Work through them in order.
+Each section ends with something that can be checked. Work through them in order.
 
 ## 1. Repository basics
 

@@ -23,7 +23,7 @@ public sealed class WeeklyAvailability
     {
         var errors = new List<ValidationError>();
 
-        var missing = Enum.GetValues<DayOfWeek>().Where(day => !hours.ContainsKey(day)).ToList();
+        var missing = IsoWeekdays.All.Where(day => !hours.ContainsKey(day)).ToList();
         if (missing.Count > 0)
         {
             errors.Add(new("weekly-availability.missing-day", $"Hours are missing for {string.Join(", ", missing)}."));
