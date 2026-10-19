@@ -7,7 +7,7 @@ public class WeeklyAvailabilityTests
     private static StudyHours Hours(decimal hours) => StudyHours.Create(hours).Value;
 
     private static Dictionary<DayOfWeek, StudyHours> EveryDay(decimal hours) =>
-        Enum.GetValues<DayOfWeek>().ToDictionary(day => day, _ => Hours(hours));
+        IsoWeekdays.All.ToDictionary(day => day, _ => Hours(hours));
 
     [Fact]
     public void Create_WithHoursForEveryDay_Succeeds()
@@ -48,6 +48,25 @@ public class WeeklyAvailabilityTests
 
         // Assert
         Assert.Equal(["weekly-availability.missing-day"], result.Errors.Select(e => e.Code));
+    }
+
+    [Fact]
+    public void Create_WithSundayAndMondayMissing_ListsMondayFirst()
+    {
+        // Arrange
+        var hours = EveryDay(1m);
+        hours.Remove(DayOfWeek.Sunday);
+        hours.Remove(DayOfWeek.Monday);
+
+        // Act
+        var result = WeeklyAvailability.Create(hours);
+
+        // Assert
+        var error = Assert.Single(result.Errors);
+        Assert.Equal("weekly-availability.missing-day", error.Code);
+        Assert.True(
+            error.Message.IndexOf(nameof(DayOfWeek.Monday), StringComparison.Ordinal)
+                < error.Message.IndexOf(nameof(DayOfWeek.Sunday), StringComparison.Ordinal));
     }
 
     [Fact]
