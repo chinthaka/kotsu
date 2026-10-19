@@ -42,5 +42,5 @@ Fill this in before you mark the PR ready.
 | --- | --- |
 | PR | |
 | Green CI run | |
-| Local `dotnet test` summary line | |
-| `enum` search in `backend/Kotsu.Scheduling` (expected: no matches) | |
+| Local `dotnet test` summary line | `Passed!  - Failed: 0, Passed: 94, Skipped: 0, Total: 94 - Kotsu.Scheduling.Tests.dll (net11.0)` |
+| `enum` search in `backend/Kotsu.Scheduling` (expected: no matches) | No matches. Great Britain names appear only in two doc comments as examples (`ExamBoard.cs`, `QualificationStage.cs`). |
