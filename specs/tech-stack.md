@@ -36,6 +36,7 @@ Most of Kotsu's code is written test-first. This is **Decided**.
 - **Red, green, refactor.** Write a failing test, write the least code that passes it, then tidy up with the tests green.
 - **Tests come first in every phase.** A roadmap phase starts by turning its "Done when" into failing tests, and is finished when they pass.
 - **Strict where logic lives.** The scheduling engine, API endpoints, data access and client logic (hooks, state, API calls, form validation) are always test-first.
+- **Arrange, Act, Assert.** Every test, backend and client, follows the Arrange, Act, Assert pattern. The three sections appear in that order and are marked with `// Arrange`, `// Act` and `// Assert` comments. Each test has one Act. A section with nothing in it can be left out, for example a test with no setup.
 - **Tests and lint run in CI.** GitHub Actions runs both on every pull request, and a pull request cannot merge while either fails.
 
 "Most" has stated exceptions, where a test written first adds little:
