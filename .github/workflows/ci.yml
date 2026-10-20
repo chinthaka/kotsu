@@ -33,6 +33,43 @@ jobs:
       - name: Test
         run: dotnet test --no-build --logger trx --results-directory TestResults
 
+      - name: Set up pnpm from clients/package.json
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: clients/package.json
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: clients/pnpm-lock.yaml
+
+      - name: Install client packages
+        working-directory: clients
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint clients (oxlint)
+        working-directory: clients
+        run: pnpm lint
+
+      - name: Typecheck clients
+        working-directory: clients
+        run: pnpm typecheck
+
+      - name: Test clients
+        working-directory: clients
+        run: pnpm test
+
+      - name: Build clients
+        working-directory: clients
+        run: pnpm build
+
+      - name: Lint infrastructure (Bicep)
+        run: |
+          az bicep install
+          az bicep lint --file infra/main.bicep
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
