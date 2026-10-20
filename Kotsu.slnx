@@ -1,8 +1,12 @@
 <Solution>
   <Folder Name="/backend/">
+    <Project Path="backend/Kotsu.Api/Kotsu.Api.csproj" />
+    <Project Path="backend/Kotsu.Data/Kotsu.Data.csproj" />
     <Project Path="backend/Kotsu.Scheduling/Kotsu.Scheduling.csproj" />
   </Folder>
   <Folder Name="/backend/tests/">
+    <Project Path="backend/tests/Kotsu.Api.Tests/Kotsu.Api.Tests.csproj" />
+    <Project Path="backend/tests/Kotsu.Data.Tests/Kotsu.Data.Tests.csproj" />
     <Project Path="backend/tests/Kotsu.Scheduling.Tests/Kotsu.Scheduling.Tests.csproj" />
   </Folder>
 </Solution>

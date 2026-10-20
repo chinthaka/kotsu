@@ -1,0 +1,9 @@
+packages:
+  - web
+  - mobile
+  - packages/*
+
+# Native helpers that only file watchers and Jest's resolver use; their install scripts aren't needed.
+allowBuilds:
+  '@parcel/watcher': false
+  unrs-resolver: false
