@@ -41,24 +41,24 @@ Phases 3–12 schedule multiple subjects at once: selected topics across the stu
 | 17 | Deploy the API to Azure from GitHub Actions, with infrastructure defined in the repository | A merge to the main branch deploys, and the health endpoint answers on an Azure URL |
 | 18 | Database, EF Core model and migrations; load seed content | Content is in PostgreSQL after a clean setup |
 | 19 | Read endpoints: list countries, stages, subjects, boards and topics | Endpoints return seed content and appear in the OpenAPI document |
-| 20 | Schedule endpoint: subjects, selected topics, window and weekly hours in, schedule out (no accounts yet) | The API returns the same schedule the engine does, including recap sessions or the recap flag |
-| 21 | Authentication: sign-up and sign-in, meeting the UK Children's Code | Only a signed-in student can reach protected endpoints |
-| 22 | Save and fetch a student's schedule | A schedule survives sign-out and sign-in |
-| 23 | Mark a topic complete | Progress is stored |
-| 24 | Missed days: report when the student is behind, and accept their reschedule answer | "Yes" stores the rescheduled plan; "No" leaves the stored plan as it is |
+| 20 | Schedule endpoint: subjects, selected topics, window and weekly hours in, schedule out | The API returns the same schedule the engine does, including recap sessions or the recap flag |
+| 21 | Rate limiting on the public endpoints, since there is no sign-in | A client that goes over its per-IP limit gets 429 Too Many Requests |
+| 22 | Missed-days endpoint: schedule, completed topics and today's date in, the "behind" report out | The API returns the same report the engine does (phase 9) |
+| 23 | Reschedule endpoint: schedule, completed topics, today's date and the student's answer in, schedule out | "Yes" returns the rescheduled plan; "No" returns the schedule unchanged |
+| 24 | Check that the API stores nothing about students | After a full run through every endpoint, the database holds only syllabus content and the telemetry holds no personal data |
 
 ## Stage 4: Web client
 
 | Phase | Work | Done when |
 | --- | --- | --- |
 | 25 | Generate the TypeScript API client; create the React + Vite app | The app builds and calls the health endpoint |
-| 26 | Sign-up and sign-in screens | A student can create an account and sign in |
-| 27 | Enter name, schedule window and country; choose stage | The student sets 1–4 weeks, picks England, Wales or Scotland, and picks a stage |
+| 26 | Keep everything the student enters about their exams, the schedule and progress in the browser only | Closing and reopening the browser shows the same choices, schedule and progress, and none of it is stored on the server |
+| 27 | Enter schedule window and country; choose stage | The student sets 1–4 weeks, picks England, Wales or Scotland, and picks a stage |
 | 28 | Choose subjects, choose board (England) and select topics | The student picks subjects, picks a board in England (automatic elsewhere), and selects the whole syllabus or specific sub-topics |
 | 29 | Enter study hours for each day of the week | The student sets hours for all 7 days |
 | 30 | Show the schedule, including recap sessions | The student sees what to study and what to recap, day by day |
 | 31 | Recap reminder | When the schedule has no room for recap, the student is reminded to recap in their own time |
-| 32 | Mark topics complete | Progress shows on the schedule |
+| 32 | Mark topics complete | Progress shows on the schedule and is kept in the browser |
 | 33 | Missed-day prompt: ask the student whether to reschedule | "Yes" shows the new schedule; "No" keeps the current one |
 | 34 | Usability pass with students aged 13 and up | Test students finish the flow without help |
 
@@ -67,9 +67,9 @@ Phases 3–12 schedule multiple subjects at once: selected topics across the stu
 | Phase | Work | Done when |
 | --- | --- | --- |
 | 35 | Create the Expo app using the shared API client | The app runs on iOS and Android and calls the API |
-| 36 | Sign-up and sign-in | A student signs in on a phone |
+| 36 | Keep everything the student enters about their exams, the schedule and progress on the phone only | Closing and reopening the app shows the same choices, schedule and progress, and none of it is stored on the server |
 | 37 | Choose country, stage, subjects and topics, and enter study hours | Same flow as web, on mobile |
-| 38 | Show the schedule with recap sessions, and mark topics complete | A schedule made on web appears on mobile, and the reverse |
+| 38 | Show the schedule with recap sessions, and mark topics complete | Same behaviour as web; the schedule and progress stay on the phone |
 | 39 | Missed-day prompt and recap reminder | Same behaviour as web, on mobile |
 | 40 | Store builds | Test builds are installable from TestFlight and Google Play testing |
 
@@ -91,9 +91,9 @@ Not planned in detail until the Great Britain launch is done. Each new country i
 | Phase | Work | Done when |
 | --- | --- | --- |
 | 47 | Choose the next country and its stages, subjects and boards | The list is written into [mission.md](mission.md) |
-| 48 | Review that country's privacy and consent rules for minors | Any change to sign-up is identified |
+| 48 | Review that country's privacy and consent rules for minors | Any change to the app is identified |
 | 49 | Curate its syllabus content, and translate the clients if needed | Every exam loads, validates and schedules |
-| 50 | Release in that country | Students there can sign up and get a schedule |
+| 50 | Release in that country | Students there can get a schedule |
 
 ## Decisions that block phases
 
@@ -105,4 +105,4 @@ These are open in [mission.md](mission.md) and [tech-stack.md](tech-stack.md). E
 | What counts as "behind", and what happens after the student answers "No" | Phase 9 |
 | How much recap time a schedule reserves, and how little time counts as too little | Phase 11 |
 | Named list of England launch boards and launch subjects per stage | Phase 14 |
-| Sign-in method, authentication provider and Children's Code review | Phase 21 |
+| Children's Code review | Phase 25 |
