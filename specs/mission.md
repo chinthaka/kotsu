@@ -28,16 +28,21 @@ At launch, Kotsu serves students in England, Wales and Scotland: Key Stages 4–
 - **The schedule is the product.** Everything else exists to get the student to one schedule covering all their exams, which they can trust and follow.
 - **Same experience everywhere.** Web, iOS and Android work the same way, built on the same backend. Each device keeps its own schedule.
 - **Built to travel.** Great Britain is first, not the only market. Nothing in the product assumes British key stages, boards or exam names are the only ones that exist.
-- **Collect as little as possible.** Most users are under 18. Kotsu has no accounts and doesn't ask for the student's name. Everything the student enters about their exams, and their schedule and progress, is stored only on their device. Kotsu's servers use it to work out a schedule and keep none of it.
+- **Collect as little as possible.** Most users are under 18. Kotsu has no accounts and doesn't ask for the student's name. Everything the student enters about their exams, and their schedule and progress, is stored only on their device. Kotsu's servers use it to work out a schedule and save none of it. They still see a device's internet address on each request, which is used only in memory to rate-limit, never recorded. Processing is reduced, not removed, so the UK Children's Code applies in full.
 - **Trustworthy content.** Syllabus content is curated by the team and checked against the exam board's published specification.
 
 ## Decisions
 
 | Area | Decision |
 | --- | --- |
-| Accounts | None. There is no sign-in. The schedule and progress are kept on the student's device, and the servers store nothing about the student. A schedule doesn't move between devices, and is lost if the device's storage is cleared, which costs little because a schedule lasts at most 4 weeks. |
+| Accounts | None. There is no sign-in. The schedule and progress are kept on the student's device, and the servers save nothing the student enters. A schedule doesn't move between devices, and is lost if the device's storage is cleared, which costs little because a schedule lasts at most 4 weeks. |
 | Student name | Not asked for. Kotsu works without knowing who the student is. |
-| Exam details | Stored only on the student's device: the schedule window, country, stage, subjects, exam board, chosen topics, weekly study hours, the schedule and progress. The device sends them to the server when a schedule is worked out or changed; the server returns the result and keeps none of them. |
+| Exam details | Stored only on the student's device: the schedule window, country, stage, subjects, exam board, chosen topics, weekly study hours, the schedule and progress. The device sends them to the server when a schedule is worked out or changed; the server returns the result and saves none of them. |
+| What the servers still see | A device's internet address on each request, used only in memory by the rate limiter and never written to a log or telemetry; and the request body, which is never logged. Request logs and telemetry hold nothing a student entered and no internet addresses, and are kept for 30 days. |
+| Children's Code | Every user is treated as a child under the UK Children's Code. There is no age check, because asking a student's age would collect more data than Kotsu needs. |
+| Third parties | None in the clients: no analytics, advertising, crash reporting, or fonts or scripts loaded from another origin. |
+| Device backups | Kotsu doesn't stop a student backing up their own device, and doesn't turn OS backups off. Whether a plan is in a backup is the student's own choice, through their device's settings. |
+| Starting fresh | The app has a "Start again" button that clears the stored plan. There is no separate "delete my data" feature: uninstalling the app or clearing the browser's storage removes everything. |
 | Launch market | Great Britain only (England, Wales, Scotland). Northern Ireland and other countries follow after launch. |
 | Launch audience | England: Key Stage 4 and 5. Scotland: National 5, Higher and Advanced Higher. Wales: Key Stage 4 (GCSE) and Post-16 (AS and A level). |
 | Launch scope | England, Wales and Scotland. Each stage launches with a small set of subjects. |
@@ -68,7 +73,7 @@ At launch, Kotsu serves students in England, Wales and Scotland: Key Stages 4–
 ## Open questions
 
 - **Which boards and subjects launch first.** England's board list is not decided (candidates: AQA, Pearson Edexcel, OCR); Scotland ships SQA and Wales ships WJEC. The subject list per stage is not decided either.
-- **Privacy for under-18s.** Kotsu stores nothing about students on its servers, but the UK Children's Code still applies to all users under 18: the app is likely to be used by children, and request logs and device storage are still covered. It must be reviewed before the web client is built. Consent ages differ in other countries (up to 16 in parts of Europe) and need revisiting at expansion.
+- **Who signs off the privacy assessment.** The Children's Code decisions are made (see Decisions), but the named data controller, the ICO fee registration and who signs off the Data Protection Impact Assessment are not. To be settled before launch. Consent ages differ in other countries (up to 16 in parts of Europe) and need revisiting at expansion.
 - **What counts as a missed day.** Kotsu cannot know a student was ill; it can only see that scheduled work was not marked complete. Whether one missed day triggers the question, and what happens after a longer gap, needs deciding.
 - **After a "no".** Whether Kotsu asks again the next day, or stays quiet until the student asks to reschedule.
 - **Splitting shared hours across subjects.** Kotsu starts with an even split. Whether a priority rule replaces it (for example hardest subject first, or student-chosen priority) is not decided.

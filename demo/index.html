@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kotsu · Stakeholder demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">K</span> Kotsu <span class="tag">Stakeholder demo</span></div>
+    <div class="topbar-note">Clickable prototype of the full student journey · web, iOS and Android will work the same way</div>
+  </header>
+
+  <main class="layout">
+    <aside class="presenter" id="presenter" aria-label="Presenter guide"></aside>
+
+    <section class="stage">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-status"><span id="clock">09:41</span><span>●●● ▮</span></div>
+        <div class="screen" id="screen"></div>
+        <div class="toast" id="toast" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

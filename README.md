@@ -1,7 +1,7 @@
 # Kotsu
 
 > [!IMPORTANT]
-> **Your data stays on your device.** Everything a student enters about their exams, and the schedule Kotsu makes, is stored only on their device. There are no accounts, Kotsu never asks for a name, and its servers keep nothing about the student. [More below](#your-data-stays-on-your-device).
+> **Your data stays on your device.** Everything a student enters about their exams, and the schedule Kotsu makes, is stored only on their device. There are no accounts and Kotsu never asks for a name. Kotsu's servers work out the schedule and save nothing a student enters. [More below](#your-data-stays-on-your-device).
 
 Kotsu is a study scheduler for students. A student picks their country, stage and subjects, selects the syllabus topics they want to cover, and Kotsu spreads those topics across a 1 to 4 week window, sharing their study time across subjects.
 
@@ -19,7 +19,7 @@ If the student misses days, Kotsu asks whether to reschedule and only does so if
 
 ## Your data stays on your device
 
-> **Everything a student enters about their exams is stored only on their device.** Nothing about the student is kept on Kotsu's servers.
+> **Everything a student enters about their exams is stored only on their device.** Kotsu's servers save none of it.
 
 This covers:
 
@@ -28,7 +28,9 @@ This covers:
 - the study hours for each day of the week
 - the schedule Kotsu produces, and which topics are marked complete
 
-There are no accounts and no sign-in, and Kotsu never asks for the student's name. To work out or change a schedule, the app sends these details to Kotsu's server, which sends the schedule back and keeps none of it. A schedule doesn't move from one device to another, and clearing the device's storage removes it.
+There are no accounts and no sign-in, and Kotsu never asks for the student's name. To work out or change a schedule, the app sends these details to Kotsu's server, which sends the schedule back and saves none of it. A schedule doesn't move from one device to another, and clearing the device's storage, or pressing "Start again" in the app, removes it.
+
+**What the servers still see.** Like any website, Kotsu's servers see a device's internet address when it connects. Kotsu uses it only for a moment, to stop any one device flooding the service, and never records it. Request logs hold no internet addresses and nothing a student entered, and are deleted after 30 days. Kotsu uses no third-party analytics, advertising or crash-reporting services. Because a student's plan is on their device, it is covered by whatever device backup they choose to use; that backup is theirs, not Kotsu's.
 
 ## Who it is for
 
@@ -55,7 +57,7 @@ Web, iOS and Android, all sharing one backend. Each device keeps its own schedul
 | Area | Choice |
 | --- | --- |
 | Backend | .NET 11 (C#), ASP.NET Core, PostgreSQL with EF Core (syllabus content only) |
-| Student data | Kept on the device; no accounts or sign-in |
+| Student data | Kept on the device; no accounts or sign-in; the server saves nothing a student enters |
 | Scheduling engine | Pure C# library with no I/O |
 | Web | React + Vite, TypeScript |
 | Mobile | React Native + Expo, TypeScript, one codebase for iOS and Android |

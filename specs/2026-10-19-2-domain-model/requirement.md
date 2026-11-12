@@ -33,13 +33,13 @@ Out of scope:
 - Hours per date (phase 3) and any scheduling logic (phase 4 onwards).
 - Recap sessions and the recap flag (phases 11–12).
 - Loading content from files (phase 13), real curated content (phase 14), persistence and the API.
-- The student's account and first name. They belong to the API (phase 21 onwards), not the engine.
+- Anything that identifies a student. Kotsu has no accounts and never asks for a name ([mission.md](../mission.md)), so the model has no student, account or name type. The engine's inputs are content ids, dates and hours only.
 
 ## Decisions
 
 | # | Decision | Notes |
 | --- | --- | --- |
-| D1 | **Validated types are created through `Create(...)`, which returns a `Result<T>`.** Constructors are private, and `Create` never throws for invalid input. | This was chosen in the phase 2 review. An invalid object can't exist, and the API (phase 20) can return the errors to the client as they are. |
+| D1 | **Validated types are created through `Create(...)`, which returns a `Result<T>`.** Constructors are private, and `Create` never throws for invalid input. | This was chosen in the phase 2 review. An invalid object can't exist, and the API (phase 21 onwards) can return the errors to the client as they are. |
 | D2 | `Result<T>` holds either a value or a non-empty list of `ValidationError`s. `ValidationError` has a stable `Code` (for example `study-hours.not-half-hour-step`) and a human-readable `Message`. `Create` reports **every** broken rule, not only the first. | Tests assert on `Code`, never on `Message`, so the wording can change freely. |
 | D3 | **Study hours come in half-hour steps.** `StudyHours` wraps a `decimal` that is zero or more and a multiple of 0.5. | This was chosen in the phase 2 review. `decimal` keeps 0.5 steps exact, where `double` would add rounding errors. |
 | D4 | A sub-topic's estimated hours must be at least 0.5. A day's available hours must be from 0 to 24. | Zero hours is valid for a day (a rest day, or the phase 6 "no study hours at all" case), but not for a sub-topic. |
