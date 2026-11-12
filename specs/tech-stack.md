@@ -27,7 +27,7 @@ Items marked **Proposed** were not decided by stakeholders. They are sensible de
 | Shared code | Types and API client generated from the OpenAPI document, shared by web and mobile | Decided |
 | UI | Separate UI for web and for mobile. Screens are not shared. | Decided |
 | Server state | TanStack Query | Proposed |
-| Student data | Everything the student enters about their exams (schedule window, country, stage, subjects, exam board, chosen topics, weekly study hours), plus the schedule and progress, is stored only on the device: browser storage on web, on-device storage on mobile. The API receives what each request needs and stores none of it. | Decided |
+| Student data | Everything the student enters about their exams (schedule window, country, stage, subjects, exam board, chosen topics, weekly study hours), plus the schedule and progress, is stored only on the device: browser storage on web, on-device storage on mobile. The API receives what each request needs, holds it only for the length of the request, and saves none of it. | Decided |
 | Tests | Vitest and React Testing Library for web; Jest for React Native; Playwright for web end-to-end | Decided |
 
 ## Development practice: TDD
@@ -73,6 +73,8 @@ infra/                  Azure infrastructure definitions
 
 Client packages are managed as a pnpm workspace (**Proposed**).
 
+Each phase's specs live in `specs/YYYY-MM-DD-<phase-number>-<short-name>/`, for example `specs/2026-11-11-4-even-spread-scheduling/`. The date is when the specs were written, and the phase number matches [roadmap.md](roadmap.md). This is **Decided**.
+
 ## Scalability
 
 | Load | Target | Status |
@@ -88,7 +90,7 @@ Both figures are small for ASP.NET Core and PostgreSQL, so the launch architectu
 | Database | One PostgreSQL instance with automated backups, sized for the peak. No read replicas. | Proposed |
 | Database connections | Connection pooling, with the pool sized so that the maximum number of API instances cannot exhaust PostgreSQL's connections. | Proposed |
 | Caching | HTTP cache headers on board, exam and syllabus content. No separate cache server. | Proposed |
-| Rate limiting | Per-IP limits on the public endpoints, since there is no sign-in. | Proposed |
+| Rate limiting | Per-IP limits on the public endpoints, since there is no sign-in. Counters are held in each instance's memory only, never in a shared store and never logged. Behind the load balancer the client address comes from `X-Forwarded-For`. | Proposed |
 | Autoscaling | On, with a low upper limit. It covers the exam-season peak and caps the cost. | Proposed |
 | Response time | 95% of requests answered within 500 ms, at both normal and peak load | Decided |
 
@@ -108,7 +110,7 @@ Kotsu launches in Great Britain only and expands to other countries later. To ke
 - **Country is data, not code.** Each country defines its own stages, subjects and boards as content (for example SQA National 5 and Highers next to GCSE and A-level), not hard-coded types. No KS-specific enum. A board is chosen only where a country has several (England); Scotland and Wales have one each.
 - **Text is translatable.** Client strings go through an i18n library from the first screen, with British English as the only language at launch (**Proposed**).
 - **Dates and times are locale-aware.** Stored in UTC, schedule windows as calendar dates, formatted on the client.
-- **Data residency.** Kotsu stores no student data on its servers. Request logs and telemetry are hosted in an Azure UK region at launch (**Proposed**).
+- **Data residency.** Kotsu saves nothing a student enters. Request logs and telemetry, which hold neither student entries nor internet addresses, are hosted in an Azure UK region at launch (**Proposed**).
 
 ## Hosting and delivery
 
@@ -135,9 +137,21 @@ Kotsu launches in Great Britain only and expands to other countries later. To ke
 | Export | OpenTelemetry Protocol (OTLP), so the telemetry store can change without touching application code | Decided |
 | Telemetry store | Azure Monitor (Application Insights) | Decided |
 | Clients | Requests carry W3C trace context, so a slow screen can be traced through to the API and database | Decided |
-| Privacy | No personal data in telemetry, including IP addresses. Requests are not linked to a student, because there are no student ids. | Decided |
+| Privacy | No personal data in telemetry: no internet addresses, no user agents and no request bodies. Application Insights' IP-based location lookup is off. Requests are not linked to a student, because there are no student ids. Logs and telemetry are kept for 30 days. | Decided |
 
 The load tests read the same telemetry, so the response-time target is measured the same way in a test as in production.
+
+## Privacy
+
+Kotsu has no accounts and saves nothing a student enters, but its servers still see each request, including the device's internet address. Processing is reduced, not removed, so the UK Children's Code applies (see [mission.md](mission.md)). These rules hold from the first line of code, and are **Decided**:
+
+- **Student entries go in POST bodies, never in a URL,** so they cannot appear in an access log. Schedule responses carry `Cache-Control: no-store`.
+- **Nothing a student entered is logged,** at any level, including on error. Exceptions carry no request body.
+- **No internet addresses in logs or telemetry,** including the hosting platform's own access logs, which are off or masked in the Bicep files.
+- **No third-party scripts, SDKs or fonts** in either client. Fonts and assets are served from Kotsu's own origin, enforced by a Content-Security-Policy on web.
+- **No device identifiers.** No install ID, no advertising ID. Trace context is a fresh random value on each request, so requests cannot be linked to each other.
+- **Device backups are the student's own choice.** Kotsu does not turn off or opt out of OS backups.
+- **Logs and telemetry are kept for 30 days,** set in the Bicep files so it can be checked.
 
 ## Open decisions
 
