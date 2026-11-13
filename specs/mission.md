@@ -15,7 +15,7 @@ At launch, Kotsu serves students in England, Wales and Scotland: Key Stages 4–
 1. The student chooses how long to schedule for (up to 4 weeks) and their country: England, Wales or Scotland.
 2. The student chooses their stage: KS4 or KS5 in England; National 5, Higher (S5) or Advanced Higher (S6) in Scotland; Key Stage 4 (GCSE) or Post-16 (AS and A level) in Wales.
 3. The student chooses their subjects for that stage.
-4. In England, the student chooses their exam board. In Scotland (SQA) and Wales (WJEC) the board is set automatically.
+4. For each subject, the student chooses an exam board in England. In Scotland (SQA) and Wales (WJEC) that subject's board is set automatically.
 5. The student selects what to study for each subject: the whole syllabus or specific sub-topics.
 6. The student enters how many hours they can study on each of the 7 days of the week.
 7. Kotsu produces one study schedule covering the selected topics within the chosen window, sharing the weekly hours across subjects, with recap time built in.
@@ -37,7 +37,7 @@ At launch, Kotsu serves students in England, Wales and Scotland: Key Stages 4–
 | --- | --- |
 | Accounts | None. There is no sign-in. The schedule and progress are kept on the student's device, and the servers save nothing the student enters. A schedule doesn't move between devices, and is lost if the device's storage is cleared, which costs little because a schedule lasts at most 4 weeks. |
 | Student name | Not asked for. Kotsu works without knowing who the student is. |
-| Exam details | Stored only on the student's device: the schedule window, country, stage, subjects, exam board, chosen topics, weekly study hours, the schedule and progress. The device sends them to the server when a schedule is worked out or changed; the server returns the result and saves none of them. |
+| Exam details | Stored only on the student's device: the schedule window, country, stage, subjects, each subject's exam board, chosen topics, weekly study hours, the schedule and progress. The device sends them to the server when a schedule is worked out or changed; the server returns the result and saves none of them. |
 | What the servers still see | A device's internet address on each request, used only in memory by the rate limiter and never written to a log or telemetry; and the request body, which is never logged. Request logs and telemetry hold nothing a student entered and no internet addresses, and are kept for 30 days. |
 | Children's Code | Every user is treated as a child under the UK Children's Code. There is no age check, because asking a student's age would collect more data than Kotsu needs. |
 | Third parties | None in the clients: no analytics, advertising, crash reporting, or fonts or scripts loaded from another origin. |
@@ -46,10 +46,10 @@ At launch, Kotsu serves students in England, Wales and Scotland: Key Stages 4–
 | Launch market | Great Britain only (England, Wales, Scotland). Northern Ireland and other countries follow after launch. |
 | Launch audience | England: Key Stage 4 and 5. Scotland: National 5, Higher and Advanced Higher. Wales: Key Stage 4 (GCSE) and Post-16 (AS and A level). |
 | Launch scope | England, Wales and Scotland. Each stage launches with a small set of subjects. |
-| Subjects per schedule | Many, within one country, stage and board. One schedule covers all the student's subjects, sharing the weekly study hours across them. The hours are split evenly at first; a priority rule may replace this. |
+| Subjects per schedule | Many, within one country and stage. Each subject uses one exam board, and different subjects in the same schedule may use different boards. One schedule covers all the student's subjects, sharing the weekly study hours across them. The hours are split evenly at first; a priority rule may replace this. |
 | Topic size | Every sub-topic carries an estimated study time in hours, curated with the content. Topics get time in proportion to it. |
 | Topic selection | The student selects what to schedule for each subject: the whole syllabus or specific sub-topics. Kotsu schedules only the selection. |
-| Exam boards | The student chooses a board only in England. Scotland (SQA) and Wales (WJEC) have one board each, applied automatically. |
+| Exam boards | Each subject uses one board. The student chooses each subject's board in England; Scotland (SQA) and Wales (WJEC) have one board each, applied automatically to every subject. |
 | Schedule window | The student chooses 1 to 4 weeks. The schedule fills that window. |
 | Study availability | The student enters how many hours they can study on each of the 7 days of the week. The schedule is built from those hours. |
 | Missed days | Kotsu never reschedules on its own. It asks the student, and only reschedules if they say yes. |

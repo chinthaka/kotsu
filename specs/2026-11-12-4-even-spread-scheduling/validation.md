@@ -13,7 +13,7 @@ The PR for `feature/phase-4` can merge when every check below passes and the evi
 ## Design
 
 - [ ] `SubjectSelection` selects the whole syllabus or specific sub-topics, keeps syllabus order, merges repeats, and rejects an empty list or an unknown id (D2–D4).
-- [ ] `Build` reports every broken schedule rule: no subjects, duplicate subject, mixed stage, mixed board (D5).
+- [ ] `Build` reports every broken schedule rule: no subjects, duplicate subject and mixed stage; different subjects with different boards are accepted (D5).
 - [ ] Too little time, including no hours at all, gives `schedule.not-enough-hours` and never an exception (D11).
 - [ ] Inside a subject, time is split evenly across sub-topics, with spare slots to the earliest (D7).
 - [ ] Dates are filled in order, each date is shared across subjects in turn, and the first subject moves along each date (D8). The worked example's sessions match the table in [requirement.md](requirement.md) exactly.

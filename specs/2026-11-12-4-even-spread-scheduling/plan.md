@@ -4,7 +4,7 @@ Branch: `feature/phase-4`, from `main` after Phase 3 was merged. See [requiremen
 
 Every section is test-first. Write the failing tests for its rules, run them and see them fail, then write the least code that passes, then tidy up. Tests use Arrange, Act, Assert with comment markers. Commit at the end of each section.
 
-Unless a test says otherwise, the examples use phase 3's calendar: a 1-week window from Monday 2 November 2026, with Monday to Thursday at 2 hours, Friday at 1.5 hours, Saturday at 4 hours and Sunday at 0 hours. That is 13.5 hours, or 27 slots. All subjects share one made-up stage and board. Subjects are given in the order listed.
+Unless a test says otherwise, the examples use phase 3's calendar: a 1-week window from Monday 2 November 2026, with Monday to Thursday at 2 hours, Friday at 1.5 hours, Saturday at 4 hours and Sunday at 0 hours. That is 13.5 hours, or 27 slots. All subjects share one made-up stage; different subjects may use different made-up boards. Subjects are given in the order listed.
 
 A small test helper builds a syllabus from a subject id and a list of sub-topic hours, so tests stay short. It lives in the test project only.
 
@@ -23,10 +23,11 @@ A small test helper builds a syllabus from a subject id and a list of sub-topic 
 
 ## 3. Schedule rules
 
-3.1 Tests (D5): `Build` fails with `schedule.no-subjects` for an empty list, `schedule.duplicate-subject` when a subject is given twice, `schedule.mixed-stage` when two syllabi have different stages, and `schedule.mixed-board` when they have different boards.
-3.2 Test (D5): a duplicate subject and a mixed board in one call report both codes.
-3.3 Tests (D11): 3 selected sub-topics in a window with 1 hour in total (2 slots) fail with `schedule.not-enough-hours`. An all-zero week fails with the same code and doesn't throw.
-3.4 Implement the checks in `EvenSpreadScheduler.Build`.
+3.1 Tests (D5): `Build` fails with `schedule.no-subjects` for an empty list, `schedule.duplicate-subject` when a subject is given twice, and `schedule.mixed-stage` when two syllabi have different stages.
+3.2 Test (D5): two selections for different subjects with the same stage but different boards succeed.
+3.3 Test (D5): a duplicate subject and a mixed stage in one call report both codes.
+3.4 Tests (D11): 3 selected sub-topics in a window with 1 hour in total (2 slots) fail with `schedule.not-enough-hours`. An all-zero week fails with the same code and doesn't throw.
+3.5 Implement the checks in `EvenSpreadScheduler.Build`.
 
 ## 4. Sharing hours across subjects
 

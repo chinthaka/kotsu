@@ -27,7 +27,7 @@ Items marked **Proposed** were not decided by stakeholders. They are sensible de
 | Shared code | Types and API client generated from the OpenAPI document, shared by web and mobile | Decided |
 | UI | Separate UI for web and for mobile. Screens are not shared. | Decided |
 | Server state | TanStack Query | Proposed |
-| Student data | Everything the student enters about their exams (schedule window, country, stage, subjects, exam board, chosen topics, weekly study hours), plus the schedule and progress, is stored only on the device: browser storage on web, on-device storage on mobile. The API receives what each request needs, holds it only for the length of the request, and saves none of it. | Decided |
+| Student data | Everything the student enters about their exams (schedule window, country, stage, subjects, each subject's exam board, chosen topics, weekly study hours), plus the schedule and progress, is stored only on the device: browser storage on web, on-device storage on mobile. The API receives what each request needs, holds it only for the length of the request, and saves none of it. | Decided |
 | Tests | Vitest and React Testing Library for web; Jest for React Native; Playwright for web end-to-end | Decided |
 
 ## Development practice: TDD
@@ -107,7 +107,7 @@ Growth beyond the peak target must not need a redesign, so these rules hold from
 
 Kotsu launches in Great Britain only and expands to other countries later. To keep that cheap:
 
-- **Country is data, not code.** Each country defines its own stages, subjects and boards as content (for example SQA National 5 and Highers next to GCSE and A-level), not hard-coded types. No KS-specific enum. A board is chosen only where a country has several (England); Scotland and Wales have one each.
+- **Country is data, not code.** Each country defines its own stages, subjects and boards as content (for example SQA National 5 and Highers next to GCSE and A-level), not hard-coded types. No KS-specific enum. Each subject uses one board; the student chooses it where a country has several (England), and it is set automatically for every subject where a country has one (Scotland and Wales).
 - **Text is translatable.** Client strings go through an i18n library from the first screen, with British English as the only language at launch (**Proposed**).
 - **Dates and times are locale-aware.** Stored in UTC, schedule windows as calendar dates, formatted on the client.
 - **Data residency.** Kotsu saves nothing a student enters. Request logs and telemetry, which hold neither student entries nor internet addresses, are hosted in an Azure UK region at launch (**Proposed**).

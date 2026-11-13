@@ -58,7 +58,7 @@
   // ---------------------------------------------------------------- content lookups
   const country = () => DATA.countries.find((c) => c.id === state.country);
   const stage = () => country()?.stages.find((s) => s.id === state.stage);
-  const board = () => country()?.boards.find((b) => b.id === state.board);
+  const board = (sid) => country()?.boards.find((b) => b.id === state.boards[sid]);
   const subject = (id) => DATA.subjects[id];
   const colourOf = (id) => PALETTE[Math.max(0, state.subjects.indexOf(id)) % PALETTE.length];
   const subIds = (sid) => subject(sid).topics.flatMap((t, ti) => t.subs.map((_, si) => `${sid}:${ti}:${si}`));
@@ -84,7 +84,7 @@
       country: null,
       stage: null,
       subjects: [],
-      board: null,
+      boards: {},
       selection: {},
       whole: {},
       open: {},
@@ -100,7 +100,13 @@
   function load() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORE_KEY));
-      if (saved && saved.screen) return { ...freshState(), ...saved, confirmStartAgain: false };
+      if (saved && saved.screen) {
+        const { board: legacyBoard, ...rest } = saved;
+        const boards = saved.boards || Object.fromEntries(
+          (saved.subjects || []).map((sid) => [sid, legacyBoard]).filter(([, id]) => id),
+        );
+        return { ...freshState(), ...rest, boards, confirmStartAgain: false };
+      }
     } catch { /* fall through to a fresh start */ }
     return freshState();
   }
@@ -285,9 +291,9 @@
     { id: 'subjects', title: 'Subjects', notes: [
       'The student picks as many subjects as they like.',
       'One schedule covers all of them, sharing the study time across subjects.'] },
-    { id: 'board', title: 'Exam board', notes: [
-      'Only students in England choose a board (AQA, Pearson Edexcel or OCR).',
-      'In Scotland (SQA) and Wales (WJEC) there is one board, so it is set automatically and the student just carries on.'] },
+    { id: 'board', title: 'Exam boards', notes: [
+      'In England, each subject can use a different board (for example, Maths on AQA and English on Pearson Edexcel).',
+      'In Scotland (SQA) and Wales (WJEC) there is one board, so it is set automatically for every subject.'] },
     { id: 'topics', title: 'Topics', notes: [
       'For each subject: the whole syllabus, or just the sub-topics they want.',
       'Every sub-topic has an estimated study time, so Kotsu knows how much work there is.'] },
@@ -456,30 +462,28 @@
 
     board: () => {
       const c = country();
-      if (c.boards.length === 1) {
-        return `${head('board')}
-        <div class="app-body">
-          <h1 class="q">Your exam board</h1>
-          <p class="sub">The exam board writes and marks your exams.</p>
-          <div class="opt on" style="cursor:default">
-            <span class="flag" style="background:${c.colour}">${c.boards[0].name.slice(0, 2)}</span>
-            <div><div class="t">${c.boards[0].name}</div><div class="h">Set for you</div></div>${tick(true)}
-          </div>
-          <div class="info"><span class="i">✨</span><div>All ${c.name === 'Scotland' ? 'Scottish' : 'Welsh'} schools use <b>${c.boards[0].name}</b>, so there's nothing to choose. Just tap Next.</div></div>
-        </div>${foot('Next', true)}`;
-      }
       return `${head('board')}
       <div class="app-body">
-        <h1 class="q">Which exam board?</h1>
-        <p class="sub">The exam board writes and marks your exams. Not sure? Ask your teacher.</p>
-        <div class="options">
-          ${c.boards.map((b) => `
-            <button class="opt ${state.board === b.id ? 'on' : ''}" data-action="board" data-arg="${b.id}">
-              <div><div class="t">${b.name}</div></div>${tick(state.board === b.id)}
-            </button>`).join('')}
-        </div>
-        <div class="info"><span class="i">💡</span><div>All your subjects use the board you pick here.</div></div>
-      </div>${foot('Next', !!state.board)}`;
+        <h1 class="q">Which exam boards do your subjects use?</h1>
+        <p class="sub">Each subject has one board. Not sure? Ask your teacher.</p>
+        ${state.subjects.map((sid) => `
+          <div class="subject-card">
+            <div class="subject-head"><div class="t">${subject(sid).name}</div></div>
+            ${c.boards.length === 1
+              ? `<div class="opt on" style="cursor:default">
+                  <div><div class="t">${c.boards[0].name}</div><div class="h">Set automatically for this subject</div></div>${tick(true)}
+                </div>`
+              : `<div class="options">
+                  ${c.boards.map((b) => `
+                    <button class="opt ${state.boards[sid] === b.id ? 'on' : ''}" data-action="board" data-arg="${sid}:${b.id}">
+                      <div><div class="t">${b.name}</div></div>${tick(state.boards[sid] === b.id)}
+                    </button>`).join('')}
+                </div>`}
+          </div>`).join('')}
+        ${c.boards.length === 1
+          ? `<div class="info"><span class="i">✨</span><div>${c.name === 'Scotland' ? 'Scottish' : 'Welsh'} subjects all use <b>${c.boards[0].name}</b>, so there is nothing to choose.</div></div>`
+          : `<div class="info"><span class="i">💡</span><div>Different subjects can use different boards.</div></div>`}
+      </div>${foot('Next', state.subjects.every((sid) => state.boards[sid]))}`;
     },
 
     topics: () => {
@@ -610,7 +614,8 @@
           <div>
             <div class="meta">${status}</div>
             <h1>My plan</h1>
-            <div class="meta">${fmtNoDay(start)} – ${fmtNoDay(end)} · ${stage().name} · ${board().name}</div>
+            <div class="meta">${fmtNoDay(start)} – ${fmtNoDay(end)} · ${stage().name}</div>
+            <div class="meta">${state.subjects.map((sid) => `${subject(sid).name}: ${board(sid).name}`).join(' · ')}</div>
           </div>
           <div class="ring" style="--p:${pct}"><span>${pct}%</span></div>
         </div>
@@ -655,7 +660,7 @@
           <div><span>Plan length</span><b>${plural(state.weeks, 'week')}</b></div>
           <div><span>Country</span><b>${country().name}</b></div>
           <div><span>Stage</span><b>${stage().name}</b></div>
-          <div><span>Exam board</span><b>${board().name}</b></div>
+          <div><span>Exam boards by subject</span><b>${state.subjects.map((sid) => `${subject(sid).name}: ${board(sid).name}`).join(', ')}</b></div>
           <div><span>Subjects</span><b>${state.subjects.map((s) => subject(s).name).join(', ')}</b></div>
           <div><span>Topics chosen</span><b>${items.length}</b></div>
           <div><span>Study hours</span><b>${hrs(weekHours())} a week</b></div>
@@ -749,12 +754,13 @@
     state.country = 'england';
     state.stage = 'england-ks4';
     state.subjects = ['maths-gcse', 'biology-gcse', 'chemistry'];
-    state.board = 'aqa';
+    state.boards = { 'maths-gcse': 'aqa', 'biology-gcse': 'pearson-edexcel', chemistry: 'ocr' };
     state.subjects.forEach((sid) => { state.whole[sid] = true; state.selection[sid] = subIds(sid); });
     state.hours = { mon: 2, tue: 2, wed: 2, thu: 2, fri: 1.5, sat: 3.5, sun: 3 };
   }
 
-  const ready = () => state.country && state.stage && state.board && state.subjects.length
+  const ready = () => state.country && state.stage && state.subjects.length
+    && state.subjects.every((sid) => state.boards[sid])
     && state.subjects.every((s) => (state.selection[s] || []).length) && weekHours() > 0;
 
   function showStory(id) {
@@ -798,7 +804,9 @@
     // Setup screens need their earlier answers; fill them in when jumping ahead.
     const needs = { stage: ['country'], subjects: ['country', 'stage'], board: ['country', 'stage', 'subjects'], topics: ['country', 'stage', 'subjects'] };
     if ((needs[id] || []).some((k) => !state[k] || (Array.isArray(state[k]) && !state[k].length))) fillSample();
-    if (id === 'topics' && !state.board) state.board = country().boards[0].id;
+    if (id === 'topics') {
+      state.subjects.forEach((sid) => { state.boards[sid] ||= country().boards[0].id; });
+    }
     go(id);
   }
 
@@ -812,27 +820,32 @@
     start: (d) => { state.start = d; render(); },
     country: (id) => {
       if (state.country !== id) {
-        const c = DATA.countries.find((x) => x.id === id);
-        Object.assign(state, { country: id, stage: null, subjects: [], selection: {}, whole: {}, board: c.boards.length === 1 ? c.boards[0].id : null });
+        Object.assign(state, { country: id, stage: null, subjects: [], selection: {}, whole: {}, boards: {} });
       }
       render();
     },
     stage: (id) => {
-      if (state.stage !== id) Object.assign(state, { stage: id, subjects: [], selection: {}, whole: {} });
+      if (state.stage !== id) Object.assign(state, { stage: id, subjects: [], selection: {}, whole: {}, boards: {} });
       render();
     },
     subject: (id) => {
       if (state.subjects.includes(id)) {
         state.subjects = state.subjects.filter((s) => s !== id);
         delete state.selection[id];
+        delete state.boards[id];
       } else {
         state.subjects.push(id);
         state.whole[id] = true;
         state.selection[id] = subIds(id);
+        if (country().boards.length === 1) state.boards[id] = country().boards[0].id;
       }
       render();
     },
-    board: (id) => { state.board = id; render(); },
+    board: (arg) => {
+      const [sid, id] = arg.split(':');
+      state.boards[sid] = id;
+      render();
+    },
     whole: (sid) => {
       state.whole[sid] = !state.whole[sid];
       if (state.whole[sid]) state.selection[sid] = subIds(sid);

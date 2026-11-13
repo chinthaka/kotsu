@@ -11,7 +11,7 @@ Open `demo/index.html` in any modern browser (double-click it). That's all.
 - **Left: the presenter guide.** It lists all 13 steps of the journey, with talking points for the current step. Click any step to jump to it. Missing answers are filled in for you.
 - **Right: the app**, shown in a phone frame. Every button works.
 - **Pretend today is.** Moves the demo's "today" forward or back a day, so you can show what happens when a student misses days.
-- **Fill in sample answers** goes straight to a finished plan (England, Key Stage 4, AQA, Maths, Biology and Chemistry, 3 weeks). **Reset demo** clears everything and goes back to the welcome screen.
+- **Fill in sample answers** goes straight to a finished plan (England, Key Stage 4, Maths on AQA, Biology on Pearson Edexcel and Chemistry on OCR, 3 weeks). **Reset demo** clears everything and goes back to the welcome screen.
 
 ## Suggested walkthrough (about 5 minutes)
 
@@ -20,7 +20,7 @@ Open `demo/index.html` in any modern browser (double-click it). That's all.
 3. **Country**: England, Wales or Scotland.
 4. **Stage**: changes with the country. Try Scotland to see National 5, Higher and Advanced Higher.
 5. **Subjects**: pick several. One plan covers them all.
-6. **Exam board**: chosen in England, and set automatically for Scotland (SQA) and Wales (WJEC).
+6. **Exam boards**: choose a board for each subject in England; Scotland (SQA) and Wales (WJEC) are set automatically for every subject.
 7. **Topics**: the whole syllabus, or switch it off and pick sub-topics.
 8. **Study hours**: hours for each day. The bar shows at once whether the topics fit.
 9. **Your schedule**: day by day, with subjects mixed through each day and purple recap sessions at the end of each week.

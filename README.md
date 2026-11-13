@@ -10,7 +10,7 @@ Kotsu is a study scheduler for students. A student picks their country, stage an
 ## What it does
 
 1. The student chooses how long to schedule for (1 to 4 weeks) and their country: England, Wales or Scotland.
-2. They choose their stage and their subjects. In England they also choose their exam board; in Scotland (SQA) and Wales (WJEC) the board is set automatically.
+2. They choose their stage and subjects. In England they choose an exam board for each subject; in Scotland (SQA) and Wales (WJEC) the board is set automatically for each subject.
 3. For each subject they select the whole syllabus or specific sub-topics.
 4. They enter how many hours they can study on each day of the week.
 5. Kotsu produces one schedule covering all their subjects, with recap time built in.
@@ -24,7 +24,7 @@ If the student misses days, Kotsu asks whether to reschedule and only does so if
 This covers:
 
 - the schedule window, country and stage
-- the subjects, exam board and chosen topics
+- the subjects, each subject's exam board and chosen topics
 - the study hours for each day of the week
 - the schedule Kotsu produces, and which topics are marked complete
 
@@ -40,11 +40,11 @@ Students aged 13 and up. Every screen must be understandable by a 13-year-old wi
 
 Great Britain only. Northern Ireland and other countries follow after launch.
 
-| Country | Stages | Exam board |
+| Country | Stages | Exam board for each subject |
 | --- | --- | --- |
-| England | Key Stage 4, Key Stage 5 | Chosen by the student |
-| Scotland | National 5, Higher, Advanced Higher | SQA |
-| Wales | Key Stage 4 (GCSE), Post-16 (AS and A level) | WJEC |
+| England | Key Stage 4, Key Stage 5 | Chosen by the student for each subject |
+| Scotland | National 5, Higher, Advanced Higher | SQA, set automatically |
+| Wales | Key Stage 4 (GCSE), Post-16 (AS and A level) | WJEC, set automatically |
 
 Syllabus content is curated by the team and checked against each board's published specification.
 
