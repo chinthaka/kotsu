@@ -80,7 +80,7 @@ Each test checks the hours given to every subject and the unused hours.
 
 7.1 Write one set of invariant checks that takes a schedule and the inputs it was built from, and checks all of these:
 - Every selected sub-topic has at least one session, and no other sub-topic has any (exactly once, part 1).
-- A sub-topic's sessions are on consecutive study dates, with no other sub-topic of the same subject between its first and last session (exactly once, part 2; D9).
+- A sub-topic's sessions form one unbroken run within its subject, with no other sub-topic of the same subject between its first and last session, and at most one session per date (exactly once, part 2; D9).
 - Every session is inside the window, on a date with more than zero hours, and has more than zero hours.
 - No date's sessions add up to more than that date's hours.
 - Each subject's sessions add up to the hours the schedule says that subject was given, and the window's hours equal the hours placed plus the unused hours.

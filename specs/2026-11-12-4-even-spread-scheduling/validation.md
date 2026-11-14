@@ -4,7 +4,7 @@ The PR for `features/2026-11-12-4-even-spread-scheduling` can merge when every c
 
 ## Roadmap "Done when"
 
-- [ ] Every selected topic is scheduled exactly once: each selected sub-topic has sessions on consecutive study dates only, with no other sub-topic of its subject in between, and no unselected sub-topic is scheduled (D9). Shown by the invariant checks over every input in plan section 7.2.
+- [ ] Every selected topic is scheduled exactly once: each selected sub-topic's sessions form one unbroken run within its subject, with no other sub-topic of its subject in between, and no unselected sub-topic is scheduled (D9). Shown by the invariant checks over every input in plan section 7.2.
 - [ ] Every session is inside the window, on a date with hours, shown by the same checks.
 - [ ] No day is given more work than its hours, shown by the same checks and by the worked example.
 - [ ] Each subject gets an even share (D6), including when the share doesn't split into whole half-hours (plan 4.1).
