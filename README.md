@@ -85,3 +85,22 @@ The build treats analyzer warnings as errors, and `dotnet format` is the lint st
 - [Mission](specs/mission.md): what Kotsu does, for whom, and the product decisions.
 - [Tech stack](specs/tech-stack.md): technology, architecture and development practice.
 - [Roadmap](specs/roadmap.md): the phased implementation plan.
+
+## Writing a phase spec
+
+Each roadmap phase gets its own spec before any code is written. Start from the templates in [specs/_templates/](specs/_templates/):
+
+| Template | What it holds |
+| --- | --- |
+| [requirement.md](specs/_templates/requirement.md) | The goal and "Done when" from the roadmap, context, scope, decisions, a worked example, constraints, risks and open questions |
+| [plan.md](specs/_templates/plan.md) | The test-first steps, in order, each with the decision it checks |
+| [validation.md](specs/_templates/validation.md) | The merge checklist, the types of test, test coverage, missing tests and why, and the evidence to fill in |
+
+To start a new phase:
+
+1. Create a folder `specs/YYYY-MM-DD-<phase-number>-<short-name>/`. The date is the day the spec is written, and the phase number matches the [roadmap](specs/roadmap.md).
+2. Copy the three templates into it and replace every `<placeholder>`. The comments in each template explain what goes where; delete them when the spec is ready for review.
+3. Write in plain, simple English. Say what must happen and how it is checked, not how to code it: no names of types, methods, files, test classes or error codes. Those are left to the developers.
+4. Do the work on a branch named after the folder: `features/YYYY-MM-DD-<phase-number>-<short-name>`.
+
+[Phase 4](specs/2026-11-12-4-even-spread-scheduling/) is a complete example.
