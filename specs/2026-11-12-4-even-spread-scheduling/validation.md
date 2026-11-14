@@ -4,22 +4,22 @@ The PR for `features/2026-11-12-4-even-spread-scheduling` can merge when every c
 
 ## Roadmap "Done when"
 
-- [ ] Every selected topic is scheduled exactly once: each selected sub-topic's sessions form one unbroken run within its subject, with no other sub-topic of its subject in between, and no unselected sub-topic is scheduled (D9). Shown by the invariant checks over every input in plan section 7.2.
-- [ ] Every session is inside the window, on a date with hours, shown by the same checks.
-- [ ] No day is given more work than its hours, shown by the same checks and by the worked example.
-- [ ] Each subject gets an even share (D6), including when the share doesn't split into whole half-hours (plan 4.1).
-- [ ] Hours a subject does not need go to the others (D6, plan 4.2 and 4.3), and hours no subject needs are reported as unused (D10, plan 4.4).
+- [x] Every selected topic is scheduled exactly once: each selected sub-topic's sessions form one unbroken run within its subject, with no other sub-topic of its subject in between, and no unselected sub-topic is scheduled (D9). Shown by the invariant checks over every input in plan section 7.2.
+- [x] Every session is inside the window, on a date with hours, shown by the same checks.
+- [x] No day is given more work than its hours, shown by the same checks and by the worked example.
+- [x] Each subject gets an even share (D6), including when the share doesn't split into whole half-hours (plan 4.1).
+- [x] Hours a subject does not need go to the others (D6, plan 4.2 and 4.3), and hours no subject needs are reported as unused (D10, plan 4.4).
 
 ## Design
 
-- [ ] A subject selection covers the whole syllabus or specific sub-topics, keeps syllabus order, merges repeats, and rejects an empty list or an unknown sub-topic (D2–D4).
-- [ ] The scheduler reports every broken schedule rule, not only the first: no subjects, duplicate subject and mixed stage. Different subjects with different boards are accepted (D5).
-- [ ] Too little time, including no hours at all, gives a reported failure and never a crash (D11).
-- [ ] Inside a subject, time is split evenly across sub-topics, with spare half-hours to the earliest (D7).
-- [ ] Dates are filled in order, each date is shared across subjects in turn, and the first subject moves along each date (D8). The worked example's sessions match the table in [requirement.md](requirement.md) exactly.
-- [ ] All hours are whole half-hours (D1), and the selection, session and schedule are immutable with read-only collections (D15).
-- [ ] The same inputs give the same schedule (D12).
-- [ ] The sharing, splitting and placing steps are separate in the code, so phases 5 and 7 can each replace one (code review).
+- [x] A subject selection covers the whole syllabus or specific sub-topics, keeps syllabus order, merges repeats, and rejects an empty list or an unknown sub-topic (D2–D4).
+- [x] The scheduler reports every broken schedule rule, not only the first: no subjects, duplicate subject and mixed stage. Different subjects with different boards are accepted (D5).
+- [x] Too little time, including no hours at all, gives a reported failure and never a crash (D11).
+- [x] Inside a subject, time is split evenly across sub-topics, with spare half-hours to the earliest (D7).
+- [x] Dates are filled in order, each date is shared across subjects in turn, and the first subject moves along each date (D8). The worked example's sessions match the table in [requirement.md](requirement.md) exactly.
+- [x] All hours are whole half-hours (D1), and the selection, session and schedule are immutable with read-only collections (D15).
+- [x] The same inputs give the same schedule (D12).
+- [x] The sharing, splitting and placing steps are separate in the code, so phases 5 and 7 can each replace one (code review).
 
 ## Types of test
 
@@ -68,9 +68,9 @@ These are deliberately not tested in phase 4:
 
 ## Tests and build
 
-- [ ] Every test follows Arrange, Act, Assert with comment markers (code review).
-- [ ] The scheduling library has no package references, no project references, no enumerations, no Sunday-first day listing and no clock reads (D13).
-- [ ] The build gives 0 warnings and 0 errors. The formatting check passes. All tests pass.
+- [x] Every test follows Arrange, Act, Assert with comment markers (code review).
+- [x] The scheduling library has no package references, no project references, no enumerations, no Sunday-first day listing and no clock reads (D13).
+- [x] The build gives 0 warnings and 0 errors. The formatting check passes. All tests pass.
 - [ ] CI is green on the PR.
 
 ## Evidence
@@ -79,9 +79,9 @@ Fill this in before you mark the PR ready.
 
 | Item | Link or output |
 | --- | --- |
-| PR | |
-| Green CI run | |
-| Local test run summary line | |
-| Searches in the scheduling library (expected: no matches) | |
-| Tests catch real bugs (plan 8.2): which tests failed for each change | |
-| Test count by kind (rule, example, invariant) | |
+| PR | To be opened from `features/2026-11-12-4-even-spread-scheduling` |
+| Green CI run | To be recorded once the PR's CI run finishes |
+| Local test run summary line | `Passed!  - Failed: 0, Passed: 154, Skipped: 0, Total: 154 - Kotsu.Scheduling.Tests.dll (net11.0)` |
+| Searches in the scheduling library (expected: no matches) | Sunday-first day listing, reads of the current date or time, enumeration declarations, package and project references: no matches. The only unordered collections are two lookup sets in the subject selection, used for membership only, never iterated for output. |
+| Tests catch real bugs (plan 8.2): which tests failed for each change | Spare half-hour to the last subject: 5 tests failed (the three sharing tests on the spare half-hour and order, the worked-example split and the worked-example sessions). Need limit dropped: 5 tests failed (every "needs less than its share" test, the early-placing test and the different-sizes split). Always start with the first subject: 0 tests failed at first, so a one-half-hour-a-day placing test was added, which then failed on its own. A date takes one half-hour too many: 12 tests failed (the worked-example sessions, the early-placing and hours-on-a-date tests, and every invariant case). Each change was reverted. |
+| Test count by kind (rule, example, invariant) | 39 new tests: 9 rule tests (2 selection, 7 schedule rules), 20 example tests (4 selection, 1 session, 6 sharing, 2 splitting, 7 placing), 10 invariant tests (9 cases and the same-inputs check). 115 tests from phases 1–3 still pass. |
