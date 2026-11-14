@@ -70,6 +70,31 @@ public class EvenSpreadSchedulerPlacingTests
     }
 
     [Fact]
+    public void Build_WhenADateHasOnlyOneHalfHour_StartsWithADifferentSubjectEachDate()
+    {
+        // Arrange: one half-hour a day, so each date goes whole to one subject.
+        var calendar = TestCalendars.Calendar(TestCalendars.Monday, 1, TestCalendars.EveryDay(0.5m));
+        var maths = Whole(TestContent.Build("maths", 1m, 1m));
+        var english = Whole(TestContent.Build("english", 2m));
+
+        // Act
+        var schedule = EvenSpreadScheduler.Build(calendar, [maths, english]).Value;
+
+        // Assert
+        Assert.Equal(
+            [
+                Session(2, _maths, 1, 0.5m),
+                Session(3, _english, 1, 0.5m),
+                Session(4, _maths, 1, 0.5m),
+                Session(5, _english, 1, 0.5m),
+                Session(6, _maths, 2, 0.5m),
+                Session(7, _english, 1, 0.5m),
+                Session(8, _maths, 2, 0.5m),
+            ],
+            schedule.Sessions);
+    }
+
+    [Fact]
     public void Build_ForAWindowStartingMidWeek_PlacesTheFirstSessionsOnTheStartDate()
     {
         // Arrange
